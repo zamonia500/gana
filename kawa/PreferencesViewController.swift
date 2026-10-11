@@ -1,4 +1,5 @@
 import Cocoa
+import UserNotifications
 
 class PreferencesViewController: NSViewController {
   @IBOutlet weak var showNotificationCheckbox: NSButton!
@@ -15,6 +16,10 @@ class PreferencesViewController: NSViewController {
 
   @IBAction func showNotification(_ sender: NSButton) {
     PermanentStorage.showsNotification = sender.state.boolValue
+
+    if sender.state.boolValue {
+      UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, _ in }
+    }
   }
 }
 

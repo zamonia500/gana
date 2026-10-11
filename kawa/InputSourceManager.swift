@@ -27,10 +27,6 @@ class InputSource {
       }
     }
 
-    if iconImage == nil, let iconRef = tisInputSource.iconRef {
-      iconImage = NSImage(iconRef: iconRef)
-    }
-
     self.icon = iconImage
   }
 

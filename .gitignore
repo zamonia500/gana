@@ -17,10 +17,5 @@ DerivedData
 *.ipa
 *.xcuserstate
 /kawa.xcarchive
-Kawa.app
+Gana.app
 .DS_Store
-
-# Carthage
-#
-Carthage/Checkouts
-Carthage/Build

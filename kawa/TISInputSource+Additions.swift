@@ -1,4 +1,4 @@
-import Foundation
+import Carbon
 
 extension TISInputSource {
   enum Category {
@@ -38,9 +38,5 @@ extension TISInputSource {
 
   var iconImageURL: URL? {
     return getProperty(kTISPropertyIconImageURL) as! URL?
-  }
-
-  var iconRef: IconRef? {
-    return OpaquePointer(TISGetInputSourceProperty(self, kTISPropertyIconRef)) as IconRef?
   }
 }

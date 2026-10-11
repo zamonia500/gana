@@ -1,3 +1,13 @@
+## 2.0.0 (11 Oct 2026)
+
+Forked from [Kawa](https://github.com/hatashiro/kawa) and renamed to Gana.
+
+* Require macOS 26 or later; build natively for Apple Silicon
+* Replace MASShortcut (Carthage) with KeyboardShortcuts (Swift Package Manager)
+* Register shortcuts at launch instead of when the preferences window opens
+* Show the preferences window on first launch
+* Replace deprecated NSUserNotification with UserNotifications
+
 ## 1.1.0 (10 Nov 2017)
 
 * Remove previous notifications on new one (#17)

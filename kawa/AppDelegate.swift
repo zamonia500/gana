@@ -1,4 +1,5 @@
 import Cocoa
+import UserNotifications
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -9,11 +10,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     if PermanentStorage.launchedForTheFirstTime {
       PermanentStorage.launchedForTheFirstTime = false
+      showPreferences()
+    }
+
+    InputSource.sources.forEach { $0.bindShortcut() }
+
+    // Users who enabled notifications before the switch to UserNotifications haven't granted permission yet.
+    if PermanentStorage.showsNotification {
+      UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, _ in }
     }
   }
 
   func applicationDidBecomeActive(_ notification: Notification) {
-    if !justLaunched || PermanentStorage.launchedForTheFirstTime {
+    if !justLaunched {
       showPreferences()
     }
 

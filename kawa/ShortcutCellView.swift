@@ -1,45 +1,27 @@
 import Cocoa
+import KeyboardShortcuts
 
 class ShortcutCellView: NSTableCellView {
-  @IBOutlet weak var shortcutView: MASShortcutView!
-
-  var inputSource: InputSource?
-  var shortcutKey: String?
+  private var recorder: KeyboardShortcuts.RecorderCocoa?
 
   func setInputSource(_ inputSource: InputSource) {
-    self.inputSource = inputSource
-    shortcutKey = inputSource.id.replacingOccurrences(of: ".", with: "-")
-    shortcutView.associatedUserDefaultsKey = shortcutKey!
-    shortcutView.shortcutValueChange = self.shortcutValueDidChange
-    MASShortcutBinder.shared().bindShortcut(withDefaultsKey: shortcutKey!, toAction: selectInput)
-  }
+    // Picks up input sources added after launch.
+    inputSource.bindShortcut()
 
-  func shortcutValueDidChange(_ sender: MASShortcutView?) {
-    if sender?.shortcutValue == nil {
-      resetShortcutBinder()
+    if let recorder = recorder {
+      recorder.shortcutName = inputSource.shortcutName
+      return
     }
-  }
 
-  func resetShortcutBinder() {
-    MASShortcutBinder.shared().breakBinding(withDefaultsKey: shortcutKey!)
-    MASShortcutBinder.shared().bindShortcut(withDefaultsKey: shortcutKey!, toAction: selectInput)
-  }
-
-  func selectInput() {
-    guard let inputSource = inputSource else { return }
-
-    inputSource.select()
-
-    if PermanentStorage.showsNotification {
-      showNotification(inputSource.name, icon: inputSource.icon)
-    }
-  }
-
-  func showNotification(_ message: String, icon: NSImage?) {
-    NSUserNotificationCenter.default.removeAllDeliveredNotifications()
-    let notification = NSUserNotification()
-    notification.informativeText = message
-    notification.contentImage = icon
-    NSUserNotificationCenter.default.deliver(notification)
+    // RecorderCocoa can't be instantiated from a storyboard, so it's added in code.
+    let recorder = KeyboardShortcuts.RecorderCocoa(for: inputSource.shortcutName)
+    recorder.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(recorder)
+    NSLayoutConstraint.activate([
+      recorder.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 1),
+      recorder.trailingAnchor.constraint(equalTo: trailingAnchor),
+      recorder.centerYAnchor.constraint(equalTo: centerYAnchor),
+    ])
+    self.recorder = recorder
   }
 }

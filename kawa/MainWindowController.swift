@@ -9,7 +9,7 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
   func showAndActivate(_ sender: AnyObject?) {
     self.showWindow(sender)
     self.window?.makeKeyAndOrderFront(sender)
-    NSApp.activate(ignoringOtherApps: true)
+    NSApp.activate()
   }
 
   func windowWillClose(_ notification: Notification) {
@@ -19,6 +19,6 @@ class MainWindowController: NSWindowController, NSWindowDelegate {
   func deactivate() {
     // focus an application owning the menu bar
     let workspace = NSWorkspace.shared
-    workspace.menuBarOwningApplication?.activate(options: NSApplication.ActivationOptions.activateIgnoringOtherApps)
+    workspace.menuBarOwningApplication?.activate(from: NSRunningApplication.current, options: [])
   }
 }
